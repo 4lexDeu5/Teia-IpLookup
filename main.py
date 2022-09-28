@@ -5,18 +5,21 @@
 import csv
 import json
 import re
-import sys
 import time
 from collections import OrderedDict
+from sys import exit
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
 import openpyxl
 import pandas
 import requests
 from pandas import *
 
-execution_start = time.time()
+Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
+imported_file = askopenfilename()  # show an "Open" dialog box and return the path to the selected file
 
-imported_file = sys.argv[1]
+execution_start = time.time()
 
 direcciones = []
 url = 'http://ip-api.com/batch?fields=message,country,city,isp,org,asname,query'
