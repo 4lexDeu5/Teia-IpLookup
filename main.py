@@ -16,8 +16,8 @@ import pandas
 import requests
 from pandas import *
 
-Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
-imported_file = askopenfilename()  # show an "Open" dialog box and return the path to the selected file
+Tk().withdraw()  
+imported_file = askopenfilename()  # Dialog box
 
 execution_start = time.time()
 
