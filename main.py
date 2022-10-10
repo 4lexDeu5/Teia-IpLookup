@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Teia (IpLookup) v1.0, Author @4lex_deus (Alejandro González)
+# Teia (IpLookup) v1.0, Author @4lexDeu5 (Alejandro González)
 
 import csv
 import json
@@ -16,23 +16,25 @@ import pandas
 import requests
 from pandas import *
 
-Tk().withdraw()  
+Tk().withdraw()
 imported_file = askopenfilename()  # Dialog box
 
 execution_start = time.time()
 
 direcciones = []
-url = 'http://ip-api.com/batch?fields=message,country,city,isp,org,asname,query'
+url = 'http://ip-api.com/batch?fields=message,country,city,isp,org,query'
 name = imported_file[:-4]
 extension = imported_file.split('.')
 
-if extension[1] == 'csv':  # Lectura de CSV y extracción de lista de IPs
+print(imported_file)
+
+if extension[len(extension)-1] == 'csv':  # Lectura de CSV y extracción de lista de IPs
     with open(imported_file, newline='') as oif:
         reader = csv.DictReader(oif)
         for row in reader:
             direcciones.append(row['Client_IP'])
 
-elif extension[1] == 'txt':  # Lectura de TXT y extracción de lista de IPs
+elif extension[len(extension)-1] == 'txt':  # Lectura de TXT y extracción de lista de IPs
     ipv4_extract_pattern = "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
     ipv6_extract_pattern = (r'^(?:(?:[0-9A-Fa-f]{1,4}:){6}(?:[0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}| \
                             (?:(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))| \
@@ -59,7 +61,7 @@ elif extension[1] == 'txt':  # Lectura de TXT y extracción de lista de IPs
     direcciones = direcciones_ipv4 + direcciones_ipv6
 
 else:
-    print("ERROR: Introduzca un archivo compatible (.txt / .csv)")
+    print("ERROR: Introduzca un archivo compatible (.txt / .csv)", "[", extension[len(extension)-1], "]")
     exit(1)
 
 final_ip = list(OrderedDict.fromkeys(direcciones))
