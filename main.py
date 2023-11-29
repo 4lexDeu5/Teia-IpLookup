@@ -120,15 +120,15 @@ for row in datos:
 
 # Formatted output
 
-    decodedResponse = json.loads(response.text)
-    data = decodedResponse['data']
-    level1 = data['abuseConfidenceScore']
-    print (level1)
-
     try:
+        decodedResponse = json.loads(response.text)
+        data = decodedResponse['data']
+        level1 = data['abuseConfidenceScore']
+        print (level1)
         xis.append(level1)
     except:
         print("No data")
+        xis.append("No data")
 
 fileEst['abuseConfidence%']=pandas.DataFrame(xis)
 fileEst.to_excel(archivo,index=False) 
