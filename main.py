@@ -135,7 +135,6 @@ fileEst.to_excel(archivo,index=False)
 
 
 execution_end = time.time()
-#print("Tiempo de ejecución:", round((execution_end - execution_start), 3), "segundos.")
 ejecucion= round((execution_end - execution_start), 3)
 
 toast = Notification(app_id=ejecucion,
