@@ -103,7 +103,7 @@ with pandas.ExcelWriter(archivo) as writer:
 
 headers = {
     'Accept': 'application/json',
-    'Key': 'a2744fac3c86c163c6fb218718f9c63c2dc8d1c19ef9223c1e229e03001873deb5d2171565f7e205' #YOUR API KEY
+    'Key': '' #YOUR API KEY
 }
 
 print(archivo)
