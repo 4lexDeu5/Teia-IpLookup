@@ -1,9 +1,10 @@
-# Teia (IpLookup) v2.0, Author @4lexDeu5 (Alejandro González)
+# Teia (IpLookup) v2.1, Author @4lexDeu5 (Alejandro González)
 
 
 import csv
 import json
 import re
+from winotify import Notification, Notifier
 import time
 from collections import OrderedDict
 from sys import exit
@@ -14,7 +15,6 @@ import openpyxl
 import pandas
 import requests
 from pandas import *
-from winotify import Notification
 
 Tk().withdraw()
 
@@ -25,10 +25,11 @@ execution_start = time.time()
 
 direcciones = []
 url1 = 'http://ip-api.com/batch?fields=message,country,city,isp,org,query'
-url2 = 'https://api.abuseipdb.com/api/v2/check-block'
+url2 = 'https://api.abuseipdb.com/api/v2/check'
 name = imported_file[:-4]
 extension = imported_file.split('.')
 
+print(imported_file)
 
 # Lectura de CSV y extracción de lista de IPs
 
@@ -102,52 +103,46 @@ with pandas.ExcelWriter(archivo) as writer:
 
 headers = {
     'Accept': 'application/json',
-    'Key': '' #YOUR AbuseIPDB API KEY
+    'Key': 'a2744fac3c86c163c6fb218718f9c63c2dc8d1c19ef9223c1e229e03001873deb5d2171565f7e205' #YOUR API KEY
 }
 
-
+print(archivo)
 fileEst = pandas.read_excel(archivo)
 datos = fileEst['query']
 xis = []
 for row in datos:
     querystring = {
-        'network':str(row)+'/31',
-    }
+    'ipAddress': row
+}
+    print(querystring)
+
+    response = requests.request(method='GET', url=url2, headers=headers, params=querystring)
+
+# Formatted output
+
+    decodedResponse = json.loads(response.text)
+    data = decodedResponse['data']
+    level1 = data['abuseConfidenceScore']
+    print (level1)
+
     try:
-        response = requests.request(method='GET', url=url2, headers=headers, params=querystring)
-
-    # Formatted output
-        decodedResponse = json.loads(response.text)
-
-        data = decodedResponse['data']
-        level1 = data['reportedAddress']
-
-        try:
-            if len(level1) > 0:
-                report=level1[0]
-                score=report['abuseConfidenceScore']
-                xis.append(score)
-            else:
-                xis.append(0)
-        except:
-            print("No data")
-
-        fileEst['abuseConfidence%']=pandas.DataFrame(xis)
-        fileEst.to_excel(archivo,index=False)
-
+        xis.append(level1)
     except:
-        print("Error al comprobar Confidence Score")
-        mensaje = "Error al comprobar Confidence Score"
+        print("No data")
+
+fileEst['abuseConfidence%']=pandas.DataFrame(xis)
+fileEst.to_excel(archivo,index=False) 
 
 
 execution_end = time.time()
+#print("Tiempo de ejecución:", round((execution_end - execution_start), 3), "segundos.")
 ejecucion= round((execution_end - execution_start), 3)
-
 
 toast = Notification(app_id=ejecucion,
                      title="TEIA",
                      msg=mensaje,
-                     duration="short"
+                     duration="short",
+                     icon=r"C:\Users\alejandro.gonzalez\Desktop\Teia\icon.ico"
                      )
 
 toast.add_actions(label="Abrir", launch=archivo)
