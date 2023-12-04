@@ -141,7 +141,7 @@ toast = Notification(app_id=ejecucion,
                      title="TEIA",
                      msg=mensaje,
                      duration="short",
-                     icon=r"C:\Users\alejandro.gonzalez\Desktop\Teia\icon.ico"
+                     icon=r"" #Ruta del icono que se desea utilizar.
                      )
 
 toast.add_actions(label="Abrir", launch=archivo)
